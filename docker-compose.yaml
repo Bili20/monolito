@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+  pgsql:
+    image: postgres:11-alpine
+    ports:
+      - '5435:5432'
+    container_name: 'sistemalogin_pgsql'
+    restart: always
+    environment:
+      POSTGRES_USER: pguser
+      POSTGRES_PASSWORD: pgpassword
+      POSTGRES_DB: sistemalogin
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - '8082:8080'
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '3000:3000'
+    container_name: 'monolito'
+    restart: always
+    volumes:
+      - .:/app
