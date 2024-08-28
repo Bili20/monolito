@@ -30,4 +30,3 @@ services:
   #     - .:/app
   #   depends_on:
   #     - pgsql
-  #   command: sh /usr/src/app/wait-postgres.sh npm run start:dev

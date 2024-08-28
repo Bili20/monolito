@@ -17,8 +17,13 @@ export class PessoaRepo implements IPessoaRepo {
   async delete(id: number): Promise<void> {}
 
   async findOne(id: number): Promise<Pessoa> {
-    return await this.pessoaRepo.findOne({ where: { id: id } });
+    return await this.pessoaRepo.findOne({
+      where: { id: id, endereco: { principal: true } },
+      relations: { endereco: true },
+    });
   }
 
-  async update(id: number, param: Pessoa): Promise<void> {}
+  async update(id: number, param: Pessoa): Promise<void> {
+    await this.pessoaRepo.update(id, param);
+  }
 }

@@ -2,11 +2,11 @@ import {
   Column,
   Entity,
   JoinColumn,
-  OneToOne,
+  ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Pessoa } from './pessoa.entity';
 import { CriaEnderecoDTO } from '../dto/criaEndereco.dto';
+import { Pessoa } from './pessoa.entity';
 
 @Entity('endereco')
 export class Endereco {
@@ -32,10 +32,13 @@ export class Endereco {
   @Column({ nullable: false })
   cep: string;
 
+  @Column({ nullable: false, default: false })
+  principal: boolean;
+
   @Column({ name: 'id_pessoa' })
   id_pessoa: number;
 
-  @OneToOne(() => Pessoa, (pessoa: Pessoa) => pessoa.endereco)
+  @ManyToOne(() => Pessoa, (pessoa: Pessoa) => pessoa.endereco)
   @JoinColumn({ name: 'id_pessoa' })
   pessoa: Pessoa;
 }

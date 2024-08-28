@@ -3,31 +3,33 @@ import {
   IsNumber,
   IsOptional,
   IsString,
-  MaxLength,
   MinLength,
 } from 'class-validator';
+import { CriaEnderecoDTO } from './criaEndereco.dto';
 
-export class CriaEnderecoDTO {
+export class AtualizaEnderecoDTO extends CriaEnderecoDTO {
   @IsString()
+  @IsOptional()
   bairro: string;
 
   @IsNumber()
+  @IsOptional()
   numero: number;
 
   @IsString()
+  @IsOptional()
   estado: string;
 
   @IsString()
+  @IsOptional()
   cidade: string;
 
   @IsBoolean()
-  principal: boolean;
-
-  @IsNumber()
   @IsOptional()
-  id_pessoa: number;
+  principal: boolean;
 
   @IsString()
   @MinLength(8)
+  @IsOptional()
   cep: string;
 }

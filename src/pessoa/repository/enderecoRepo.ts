@@ -13,4 +13,18 @@ export class EnderecoRepo implements IEnderecoRepo {
   async create(param: Endereco): Promise<Endereco> {
     return this.enderecoRepo.save(param);
   }
+
+  async findEnderecosPessoa(id_pessoa: number): Promise<Endereco[]> {
+    return await this.enderecoRepo.find({ where: { id_pessoa: id_pessoa } });
+  }
+
+  async findOneEnderecoPrincipalPessoa(id_pessoa: number): Promise<Endereco> {
+    return await this.enderecoRepo.findOne({
+      where: { id_pessoa: id_pessoa, principal: true },
+    });
+  }
+
+  async update(id: number, param: Endereco): Promise<void> {
+    await this.enderecoRepo.update(id, param);
+  }
 }

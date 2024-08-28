@@ -1,12 +1,6 @@
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  OneToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
-import { Endereco } from './endereco.entity';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { CriaPessoaDto } from '../dto/criaPessoa.dto';
+import { Endereco } from './endereco.entity';
 
 @Entity('pessoa')
 export class Pessoa {
@@ -20,7 +14,7 @@ export class Pessoa {
   @Column({ name: 'nome', nullable: false })
   nome: string;
 
-  @Column({ name: 'documento', nullable: false })
+  @Column({ name: 'documento', nullable: false, unique: true })
   documento: string;
 
   @Column({ name: 'data_nacimento', nullable: false })
@@ -35,6 +29,6 @@ export class Pessoa {
   @Column({ name: 'sexo', nullable: false })
   sexo: string;
 
-  @OneToOne(() => Endereco, (endereco: Endereco) => endereco.pessoa)
+  @OneToMany(() => Endereco, (endereco: Endereco) => endereco.pessoa)
   endereco: Endereco;
 }

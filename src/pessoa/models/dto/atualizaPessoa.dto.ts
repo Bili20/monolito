@@ -1,26 +1,33 @@
-import { IsEmail, IsObject, IsString, MinLength } from 'class-validator';
+import { IsEmail, IsObject, IsOptional, IsString } from 'class-validator';
 import { CriaEnderecoDTO } from './criaEndereco.dto';
+import { CriaPessoaDto } from './criaPessoa.dto';
 
-export class CriaPessoaDto {
+export class AtualizaPessoaDTO extends CriaPessoaDto {
   @IsString()
+  @IsOptional()
   nome: string;
 
   @IsString()
+  @IsOptional()
   documento: string;
 
   @IsString()
+  @IsOptional()
   data_nacimento: Date;
 
   @IsEmail()
+  @IsOptional()
   email: string;
 
   @IsString()
-  @MinLength(11)
+  @IsOptional()
   telefone: string;
 
   @IsString()
+  @IsOptional()
   sexo: string;
 
   @IsObject()
+  @IsOptional()
   endereco: CriaEnderecoDTO;
 }
