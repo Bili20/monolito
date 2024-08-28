@@ -5,7 +5,7 @@ export class CriaPessoaDto {
   documento: string;
   data_nacimento: Date;
   email: string;
-  telefone: number;
+  telefone: string;
   sexo: string;
   endereco: CriaEnderecoDTO;
 }

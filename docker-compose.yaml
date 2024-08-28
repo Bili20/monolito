@@ -4,7 +4,7 @@ services:
   pgsql:
     image: postgres:11-alpine
     ports:
-      - '5435:5432'
+      - '5432:5432'
     container_name: 'pg_monolito'
     restart: always
     environment:
@@ -18,13 +18,16 @@ services:
     ports:
       - '8080:8080'
 
-  app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    ports:
-      - '3000:3000'
-    container_name: 'monolito'
-    restart: always
-    volumes:
-      - .:/app
+  # app:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - '3000:3000'
+  #   container_name: 'monolito'
+  #   restart: always
+  #   volumes:
+  #     - .:/app
+  #   depends_on:
+  #     - pgsql
+  #   command: sh /usr/src/app/wait-postgres.sh npm run start:dev

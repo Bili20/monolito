@@ -6,9 +6,14 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Endereco } from './endereco.entity';
+import { CriaPessoaDto } from '../dto/criaPessoa.dto';
 
 @Entity('pessoa')
 export class Pessoa {
+  constructor(props?: CriaPessoaDto) {
+    Object.assign(this, props);
+  }
+
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -25,15 +30,11 @@ export class Pessoa {
   email: string;
 
   @Column({ name: 'telefone', nullable: false })
-  telefone: number;
+  telefone: string;
 
   @Column({ name: 'sexo', nullable: false })
   sexo: string;
 
-  @Column({ name: 'id_endereco', nullable: false, unique: true })
-  id_endereco: number;
-
   @OneToOne(() => Endereco, (endereco: Endereco) => endereco.pessoa)
-  @JoinColumn({ name: 'id_endereco' })
   endereco: Endereco;
 }

@@ -10,8 +10,8 @@ export class PessoaRepo implements IPessoaRepo {
     @InjectRepository(Pessoa) private readonly pessoaRepo: Repository<Pessoa>,
   ) {}
 
-  async create(param: Pessoa): Promise<void> {
-    await this.pessoaRepo.save(param);
+  async create(param: Pessoa): Promise<Pessoa> {
+    return await this.pessoaRepo.save(param);
   }
 
   async delete(id: number): Promise<void> {}
