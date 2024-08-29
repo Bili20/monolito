@@ -35,5 +35,6 @@ import { AtualizaEnderecoController } from './useCase/atualizaEndereco/atualizaE
     EnderecoRepo,
     { provide: 'IEnderecoRepo', useExisting: EnderecoRepo },
   ],
+  exports: [BuscaUmaPessoaUsecase],
 })
 export class PessoaModule {}
