@@ -1,8 +1,5 @@
 FROM node:20
 
-COPY wait-postgres.sh /app/wait-postgres.sh
-RUN chmod +x /app/wait-postgres.sh
-
 RUN npm install -g npm@10.5.0
 
 WORKDIR /app
