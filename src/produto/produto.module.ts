@@ -17,5 +17,6 @@ import { AtualizaEstoqueUseCase } from './useCases/atualizaEstoque/atualizaEstoq
     ProdutoRepo,
     { provide: 'IProdutoRepo', useExisting: ProdutoRepo },
   ],
+  exports: [BuscaUmProdutoUseCase, AtualizaEstoqueUseCase],
 })
 export class ProdutoModule {}

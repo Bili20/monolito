@@ -1,5 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { CadastroProdutoDto } from '../dto/cadastroProduto.dto';
+import { PedidoProduto } from 'src/pedido/models/entities/pedidoProduto.entity';
 
 @Entity('produto')
 export class Produto {
@@ -18,4 +19,10 @@ export class Produto {
 
   @Column({ nullable: false, default: 0 })
   qtd_estoque: number;
+
+  @OneToMany(
+    () => PedidoProduto,
+    (pedidoProduto: PedidoProduto) => pedidoProduto.produto,
+  )
+  pedidoProduto: PedidoProduto;
 }

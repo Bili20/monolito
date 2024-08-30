@@ -1,4 +1,11 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Pedido } from 'src/pedido/models/entities/pedido.entity';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 @Entity('nota_fiscal')
 export class NotaFiscal {
   @PrimaryGeneratedColumn()
@@ -14,6 +21,10 @@ export class NotaFiscal {
   @Column({ nullable: false })
   anexo: string;
 
-  @Column({ nullable: false })
+  @Column({ nullable: false, unique: true })
   id_pedido: number;
+
+  @OneToOne(() => Pedido, (pedido: Pedido) => pedido.notaFiscal)
+  @JoinColumn({ name: 'id_pedido' })
+  pedido: Pedido;
 }
