@@ -8,7 +8,7 @@ export class CriaEnderecoController {
   private readonly criaEnderecoUseCase: CriaEnderecoUseCase;
 
   @Post()
-  criaEndereco(@Body() param: CriaEnderecoDTO) {
-    return this.criaEnderecoUseCase.execute(param);
+  async criaEndereco(@Body() param: CriaEnderecoDTO) {
+    return await this.criaEnderecoUseCase.execute(param);
   }
 }

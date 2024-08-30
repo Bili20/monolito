@@ -8,7 +8,7 @@ export class CriaPedidoController {
   private readonly criaPedidoUseCase: CriaPedidoUseCase;
 
   @Post()
-  criaPedido(@Body() param: CriaPedidoDto) {
-    this.criaPedidoUseCase.execute(param);
+  async criaPedido(@Body() param: CriaPedidoDto) {
+    await this.criaPedidoUseCase.execute(param);
   }
 }

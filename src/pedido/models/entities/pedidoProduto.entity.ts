@@ -19,6 +19,9 @@ export class PedidoProduto {
   @Column({ nullable: false })
   id_pedido: number;
 
+  @Column({ nullable: false })
+  quantidade: number;
+
   @ManyToOne(() => Pedido, (pedido: Pedido) => pedido.pedidoProduto)
   @JoinColumn({ name: 'id_pedido' })
   pedido: Pedido;

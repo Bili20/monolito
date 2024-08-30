@@ -8,10 +8,10 @@ export class AtualizaEnderecoController {
   private readonly atualizaEnderecoUseCase: AtualizaEnderecoUseCase;
 
   @Patch(':id')
-  atualizaEndereco(
+  async atualizaEndereco(
     @Param('id') id: number,
     @Body() param: AtualizaEnderecoDTO,
   ) {
-    return this.atualizaEnderecoUseCase.execute(id, param);
+    return await this.atualizaEnderecoUseCase.execute(id, param);
   }
 }

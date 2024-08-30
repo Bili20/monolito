@@ -8,7 +8,7 @@ export class CriapessoaController {
   private readonly criaPessoaUsecase: CriaPessoaUsecase;
 
   @Post()
-  criaPessoa(@Body() param: CriaPessoaDto) {
-    return this.criaPessoaUsecase.execute(param);
+  async criaPessoa(@Body() param: CriaPessoaDto) {
+    return await this.criaPessoaUsecase.execute(param);
   }
 }

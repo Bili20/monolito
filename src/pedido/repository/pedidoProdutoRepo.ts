@@ -12,8 +12,6 @@ export class PedidoProdutoRepo implements IPedidoProdutoRepo {
   ) {}
 
   async create(param: PedidoProduto): Promise<void> {
-    await this.pedidoProdutoRepo.manager.transaction(async (transaction) => {
-      await transaction.save(param);
-    });
+    await this.pedidoProdutoRepo.save(param);
   }
 }

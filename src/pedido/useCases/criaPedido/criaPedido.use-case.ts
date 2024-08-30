@@ -5,6 +5,8 @@ import { BuscaUmProdutoUseCase } from 'src/produto/useCases/buscaUmProduto/busca
 import { CriaPedidoProdutoUseCase } from '../criaPedidoProduto/criaPedidoProduto.use-case';
 import { Pedido } from 'src/pedido/models/entities/pedido.entity';
 import { AtualizaEstoqueUseCase } from 'src/produto/useCases/atualizaEstoque/atualizaEstoque.use-case';
+import { CriaNotaFiscalUseCase } from 'src/nota-fiscal/useCase/criaNotaFiscal/criaNotaFiscal.use-case';
+import { ProdutosNotaDTO } from 'src/nota-fiscal/models/dto/produtosNota.dto';
 
 @Injectable()
 export class CriaPedidoUseCase {
@@ -16,6 +18,8 @@ export class CriaPedidoUseCase {
   private readonly criaPedidoProdutoUseCase: CriaPedidoProdutoUseCase;
   @Inject(AtualizaEstoqueUseCase)
   private readonly atualizaEstoqueUseCase: AtualizaEstoqueUseCase;
+  @Inject(CriaNotaFiscalUseCase)
+  private readonly criaNotaFiscalUseCase: CriaNotaFiscalUseCase;
 
   async execute(param: CriaPedidoDto) {
     try {
@@ -24,7 +28,8 @@ export class CriaPedidoUseCase {
       pedido.id_pessoa = param.id_pessoa;
       pedido.total = 0;
 
-      const arrayProduto = [];
+      const arrayProduto: ProdutosNotaDTO[] = [];
+
       for (const produto of param.produtos) {
         const dataProduto = await this.buscaUmProdutoUseCase.execute(
           produto.id_produto,
@@ -37,16 +42,21 @@ export class CriaPedidoUseCase {
 
         pedido.total = pedido.total + dataProduto.valor * produto.quantidade;
         pedido.quantidade = pedido.quantidade + produto.quantidade;
-        arrayProduto.push(produto.id_produto);
+        arrayProduto.push({
+          id: dataProduto.id,
+          nome: dataProduto.nome,
+          quantidade: produto.quantidade,
+          valor: dataProduto.valor,
+        });
       }
       const dataPedido = await this.pedidoRepo.create(pedido);
       await this.criaPedidoProdutoUseCase.execute({
         id_pedido: dataPedido.id,
-        id_produtos: arrayProduto,
+        produtos: arrayProduto,
       });
-      // TODO: falta o gera nota fiscal
+
+      await this.criaNotaFiscalUseCase.execute(dataPedido, arrayProduto);
     } catch (e) {
-      console.log(e);
       throw new HttpException(
         e.response ?? 'Erro ao fazer pedido.',
         e.status ?? 400,

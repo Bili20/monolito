@@ -9,12 +9,7 @@ export class PedidoRepo implements IPedidoRepo {
   ) {}
 
   async create(param: Pedido): Promise<Pedido> {
-    const pedido = await this.pedidoRepo.manager.transaction(
-      async (transaction) => {
-        return await transaction.save(param);
-      },
-    );
-    return pedido;
+    return await this.pedidoRepo.manager.save(param);
   }
 
   async findOne(id: number): Promise<Pedido> {

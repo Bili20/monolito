@@ -9,10 +9,11 @@ export class CriaPedidoProdutoUseCase {
   private readonly pedidoProdutoRepo: IPedidoProdutoRepo;
 
   async execute(param: CriaPedidoProdutoDTO) {
-    for (const produto of param.id_produtos) {
+    for (const produto of param.produtos) {
       const pedidoProduto = new PedidoProduto();
       pedidoProduto.id_pedido = param.id_pedido;
-      pedidoProduto.id_produto = produto;
+      pedidoProduto.id_produto = produto.id;
+      pedidoProduto.quantidade = produto.quantidade;
       await this.pedidoProdutoRepo.create(pedidoProduto);
     }
   }

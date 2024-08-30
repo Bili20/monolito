@@ -8,7 +8,10 @@ export class AtualizaPessoaController {
   private readonly atualizaPessoaUseCase: AtualizaPessoaUseCase;
 
   @Patch(':id/atualiza')
-  atualizaPessoa(@Param('id') id: number, @Body() param: AtualizaPessoaDTO) {
-    return this.atualizaPessoaUseCase.execute(id, param);
+  async atualizaPessoa(
+    @Param('id') id: number,
+    @Body() param: AtualizaPessoaDTO,
+  ) {
+    return await this.atualizaPessoaUseCase.execute(id, param);
   }
 }
