@@ -4,7 +4,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
  Unexpected results may occur if the code is changed deliberately.
 -->
 <dbmodel pgmodeler-ver="1.1.1" use-changelog="false" max-obj-count="7"
-	 last-position="0,-10" last-zoom="0.55" scene-rect="0,-20,2320.55,1500.12"
+	 last-position="0,-11" last-zoom="0.55" scene-rect="0,-20,2320.55,1500.12"
 	 default-schema="public" default-owner="postgres"
 	 layers="Default layer"
 	 active-layers="0"
@@ -19,7 +19,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <table name="pedido" layers="0" collapse-mode="2" max-obj-count="6" z-value="0">
 	<schema name="public"/>
-	<position x="740" y="540"/>
+	<position x="720" y="520"/>
 	<column name="id" not-null="true">
 		<type name="serial" length="0"/>
 	</column>
@@ -58,10 +58,22 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</constraint>
 </table>
 
-<table name="many_produto_has_many_pedido" layers="0" collapse-mode="2" max-obj-count="3" z-value="0">
+<table name="pedido_produto" layers="0" collapse-mode="2" max-obj-count="3" z-value="0">
 	<schema name="public"/>
-	<position x="1200" y="1080"/>
-</table>
+	<position x="1300" y="1100"/>
+	<column name="quantidade" not-null="true">
+		<type name="integer" length="0"/>
+	</column>
+
+	<customidxs object-type="column">
+		<object name="id_pedido" index="1"/>
+		<object name="id_produto" index="0"/>
+	</customidxs>
+	<customidxs object-type="constraint">
+		<object name="pedido_fk" index="2"/>
+		<object name="pedido_produto_pk" index="0"/>
+		<object name="produto_fk" index="1"/>
+	</customidxs></table>
 
 <relationship name="produto_has_many_many_produto_has_many_pedido" type="rel1n" layers="0"
 	 src-col-pattern="{sc}_{st}"
@@ -69,7 +81,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	 src-fk-pattern="{st}_fk"
 	 custom-color="#858e1e"
 	 src-table="public.produto"
-	 dst-table="public.many_produto_has_many_pedido"
+	 dst-table="public.pedido_produto"
 	 src-required="true" dst-required="false"
 	 identifier="true"
 >
@@ -84,7 +96,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	 src-fk-pattern="{st}_fk"
 	 custom-color="#858e1e"
 	 src-table="public.pedido"
-	 dst-table="public.many_produto_has_many_pedido"
+	 dst-table="public.pedido_produto"
 	 src-required="true" dst-required="false"
 	 identifier="true"
 />
