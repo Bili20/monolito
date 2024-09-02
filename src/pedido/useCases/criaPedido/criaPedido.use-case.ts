@@ -8,6 +8,7 @@ import { AtualizaEstoqueUseCase } from 'src/produto/useCases/atualizaEstoque/atu
 import { CriaNotaFiscalUseCase } from 'src/nota-fiscal/useCase/criaNotaFiscal/criaNotaFiscal.use-case';
 import { ProdutosNotaDTO } from 'src/nota-fiscal/models/dto/produtosNota.dto';
 import { EnviaEmailUseCase } from 'src/email/enviaEmail.use-case';
+import { ProdutosQuantidadeDTO } from 'src/pedido/models/dto/produtosQuatidade.dto';
 
 @Injectable()
 export class CriaPedidoUseCase {
@@ -26,56 +27,73 @@ export class CriaPedidoUseCase {
 
   async execute(param: CriaPedidoDto) {
     try {
-      const pedido = new Pedido();
-      pedido.quantidade = 0;
-      pedido.id_pessoa = param.id_pessoa;
-      pedido.total = 0;
-
-      const arrayProduto: ProdutosNotaDTO[] = [];
-
-      for (const produto of param.produtos) {
-        const dataProduto = await this.buscaUmProdutoUseCase.execute(
-          produto.id_produto,
-        );
-
-        await this.atualizaEstoqueUseCase.execute(
-          produto.quantidade,
-          dataProduto,
-        );
-
-        pedido.total = pedido.total + dataProduto.valor * produto.quantidade;
-        pedido.quantidade = pedido.quantidade + produto.quantidade;
-        arrayProduto.push({
-          id: dataProduto.id,
-          nome: dataProduto.nome,
-          quantidade: produto.quantidade,
-          valor: dataProduto.valor,
-        });
-      }
-      const dataPedido = await this.pedidoRepo.create(pedido);
+      const produto = await this.geraArrayDosProdutosDoPedido(
+        param.id_pessoa,
+        param.produtos,
+      );
+      const dataPedido = await this.pedidoRepo.create(produto.pedido);
       await this.criaPedidoProdutoUseCase.execute({
         id_pedido: dataPedido.id,
-        produtos: arrayProduto,
+        produtos: produto.arrayProduto,
       });
 
-      const pdfNota = await this.criaNotaFiscalUseCase.execute(
-        dataPedido,
-        arrayProduto,
-      );
-      await this.enviaEmailUseCase.execute(
-        pdfNota.pessoa,
-        {
-          numero: pdfNota.numero,
-          data_cadastro: pdfNota.dataCadastro,
-          total: pedido.total,
-        },
-        `./notas/${pdfNota.filePath}`,
-      );
+      await this.geraNotaFiscalDoPedido(dataPedido, produto.arrayProduto);
     } catch (e) {
       throw new HttpException(
         e.response ?? 'Erro ao fazer pedido.',
         e.status ?? 400,
       );
     }
+  }
+
+  private async geraNotaFiscalDoPedido(
+    pedido: Pedido,
+    arrayProduto: ProdutosNotaDTO[],
+  ) {
+    const pdfNota = await this.criaNotaFiscalUseCase.execute(
+      pedido,
+      arrayProduto,
+    );
+    await this.enviaEmailUseCase.execute(
+      pdfNota.pessoa,
+      {
+        numero: pdfNota.numero,
+        data_cadastro: pdfNota.dataCadastro,
+        total: pedido.total,
+      },
+      `./notas/${pdfNota.filePath}`,
+    );
+  }
+
+  private async geraArrayDosProdutosDoPedido(
+    id_pessoa: number,
+    produtos: ProdutosQuantidadeDTO[],
+  ) {
+    const pedido = new Pedido();
+    pedido.quantidade = 0;
+    pedido.id_pessoa = id_pessoa;
+    pedido.total = 0;
+
+    const arrayProduto: ProdutosNotaDTO[] = [];
+    for (const produto of produtos) {
+      const dataProduto = await this.buscaUmProdutoUseCase.execute(
+        produto.id_produto,
+      );
+
+      await this.atualizaEstoqueUseCase.execute(
+        produto.quantidade,
+        dataProduto,
+      );
+
+      pedido.total = pedido.total + dataProduto.valor * produto.quantidade;
+      pedido.quantidade = pedido.quantidade + produto.quantidade;
+      arrayProduto.push({
+        id: dataProduto.id,
+        nome: dataProduto.nome,
+        quantidade: produto.quantidade,
+        valor: dataProduto.valor,
+      });
+    }
+    return { arrayProduto, pedido };
   }
 }
