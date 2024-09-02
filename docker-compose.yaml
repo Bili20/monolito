@@ -24,15 +24,15 @@ services:
       - '1025:1025'
       - '8025:8025'
 
-  # app:
-  #   build:
-  #     context: .
-  #     dockerfile: Dockerfile
-  #   ports:
-  #     - '3000:3000'
-  #   container_name: 'monolito'
-  #   restart: always
-  #   volumes:
-  #     - .:/app
-  #   depends_on:
-  #     - pgsql
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '3000:3000'
+    container_name: 'monolito'
+    restart: always
+    volumes:
+      - .:/app
+    depends_on:
+      - pgsql

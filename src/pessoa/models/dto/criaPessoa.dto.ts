@@ -20,7 +20,4 @@ export class CriaPessoaDto {
 
   @IsString()
   sexo: string;
-
-  @IsObject()
-  endereco: CriaEnderecoDTO;
 }

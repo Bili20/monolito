@@ -9,6 +9,7 @@ import { Pessoa } from 'src/pessoa/models/entities/pessoa.entity';
 import { IPessoaRepo } from 'src/pessoa/models/interfaces/pessoaRepo.interface';
 import { CriaEnderecoUseCase } from '../criaEndereco/criaEndereco.use-case';
 import { isCPF } from 'validation-br';
+import { CriaEnderecoDTO } from 'src/pessoa/models/dto/criaEndereco.dto';
 
 @Injectable()
 export class CriaPessoaUsecase {
@@ -17,12 +18,18 @@ export class CriaPessoaUsecase {
   @Inject('IPessoaRepo')
   private readonly pessoaRepo: IPessoaRepo;
 
-  async execute(param: CriaPessoaDto) {
+  async execute(param: CriaPessoaDto & { endereco?: CriaEnderecoDTO }) {
     try {
       if (!isCPF(param.documento)) {
         throw new BadRequestException({ message: 'Documento inválido.' });
       }
-      const pessoa = new Pessoa(param);
+      const pessoa = new Pessoa();
+      pessoa.nome = param.nome;
+      pessoa.email = param.email;
+      pessoa.documento = param.documento;
+      pessoa.data_nacimento = param.data_nacimento;
+      pessoa.sexo = param.sexo;
+      pessoa.telefone = param.telefone;
 
       const dataPessoa = await this.pessoaRepo.create(pessoa);
       param.endereco.id_pessoa = dataPessoa.id;
