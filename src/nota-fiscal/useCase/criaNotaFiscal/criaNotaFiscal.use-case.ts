@@ -7,6 +7,7 @@ import {
 import * as fs from 'fs';
 import * as PDFDocument from 'pdfkit';
 import { DadoEmpresa } from 'src/constants/contants';
+import { EnviaEmailUseCase } from 'src/email/enviaEmail.use-case';
 import { ProdutosNotaDTO } from 'src/nota-fiscal/models/dto/produtosNota.dto';
 import { NotaFiscal } from 'src/nota-fiscal/models/entities/nota-fiscal.entity';
 import { INotaFiscalRepo } from 'src/nota-fiscal/models/interfaces/notaFiscalRepo.interface';
@@ -24,13 +25,14 @@ export class CriaNotaFiscalUseCase {
     let pdfNota;
     try {
       pdfNota = await this.geraPdfNotaFiscal(pedido, produtos);
+
       const notaFiscal = new NotaFiscal();
-      notaFiscal.anexo = pdfNota;
+      notaFiscal.anexo = pdfNota.filePath;
       notaFiscal.id_pedido = pedido.id;
       await this.notaFiscalrepo.create(notaFiscal);
+      return pdfNota;
     } catch (e) {
-      fs.unlinkSync('./notas/' + pdfNota);
-      console.log(e);
+      fs.unlinkSync('./notas/' + pdfNota.filePath);
       throw new HttpException(
         e.response ?? 'Erro ao gerar nota fiscal.',
         e.status ?? 400,
@@ -42,13 +44,14 @@ export class CriaNotaFiscalUseCase {
     const doc = new PDFDocument();
     const pessoa = await this.buscaUmaPessoaUsecase.execute(pedido.id_pessoa);
     const numeroNota = pedido.id;
+    const dataCadastro = new Date().toLocaleDateString();
     const filePath = 'nota_fiscal' + numeroNota + '.pdf';
 
     doc.fontSize(18).text('Nota Fiscal', { align: 'center' });
     doc.text('-----------------------------------------------------------');
     doc.moveDown();
     doc.fontSize(12).text(`Número: ${numeroNota}`);
-    doc.text(`Data de emissão: ${new Date().toLocaleDateString()}`);
+    doc.text(`Data de emissão: ${dataCadastro}`);
     doc.moveDown();
     doc.text(`Comprador: ${pessoa.nome}`);
     doc.text(`Documento: ${pessoa.documento}`);
@@ -83,7 +86,12 @@ export class CriaNotaFiscalUseCase {
         err,
       });
     });
-
-    return filePath;
+    return {
+      filePath,
+      pessoa,
+      numero: numeroNota,
+      data: dataCadastro,
+      total: pedido.total,
+    };
   }
 }

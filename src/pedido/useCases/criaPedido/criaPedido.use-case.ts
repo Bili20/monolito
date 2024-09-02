@@ -7,6 +7,7 @@ import { Pedido } from 'src/pedido/models/entities/pedido.entity';
 import { AtualizaEstoqueUseCase } from 'src/produto/useCases/atualizaEstoque/atualizaEstoque.use-case';
 import { CriaNotaFiscalUseCase } from 'src/nota-fiscal/useCase/criaNotaFiscal/criaNotaFiscal.use-case';
 import { ProdutosNotaDTO } from 'src/nota-fiscal/models/dto/produtosNota.dto';
+import { EnviaEmailUseCase } from 'src/email/enviaEmail.use-case';
 
 @Injectable()
 export class CriaPedidoUseCase {
@@ -20,6 +21,8 @@ export class CriaPedidoUseCase {
   private readonly atualizaEstoqueUseCase: AtualizaEstoqueUseCase;
   @Inject(CriaNotaFiscalUseCase)
   private readonly criaNotaFiscalUseCase: CriaNotaFiscalUseCase;
+  @Inject(EnviaEmailUseCase)
+  private readonly enviaEmailUseCase: EnviaEmailUseCase;
 
   async execute(param: CriaPedidoDto) {
     try {
@@ -36,8 +39,8 @@ export class CriaPedidoUseCase {
         );
 
         await this.atualizaEstoqueUseCase.execute(
-          produto.id_produto,
           produto.quantidade,
+          dataProduto,
         );
 
         pedido.total = pedido.total + dataProduto.valor * produto.quantidade;
@@ -55,7 +58,19 @@ export class CriaPedidoUseCase {
         produtos: arrayProduto,
       });
 
-      await this.criaNotaFiscalUseCase.execute(dataPedido, arrayProduto);
+      const pdfNota = await this.criaNotaFiscalUseCase.execute(
+        dataPedido,
+        arrayProduto,
+      );
+      await this.enviaEmailUseCase.execute(
+        pdfNota.pessoa,
+        {
+          numero: pdfNota.numero,
+          data_cadastro: pdfNota.dataCadastro,
+          total: pedido.total,
+        },
+        `./notas/${pdfNota.filePath}`,
+      );
     } catch (e) {
       throw new HttpException(
         e.response ?? 'Erro ao fazer pedido.',

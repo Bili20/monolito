@@ -10,6 +10,7 @@ import { ProdutoModule } from 'src/produto/produto.module';
 import { CriaPedidoController } from './useCases/criaPedido/criaPedido.controller';
 import { NotaFiscalModule } from 'src/nota-fiscal/nota-fiscal.module';
 import { BsucaUmPedidoUsecase } from './useCases/buscaUmPedido/buscaUmPedido.use-case';
+import { EnviaEmailUseCase } from 'src/email/enviaEmail.use-case';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { BsucaUmPedidoUsecase } from './useCases/buscaUmPedido/buscaUmPedido.use
     PedidoProdutoRepo,
     { provide: 'IPedidoRepo', useExisting: PedidoRepo },
     { provide: 'IPedidoProdutoRepo', useExisting: PedidoProdutoRepo },
+    EnviaEmailUseCase,
   ],
   exports: [BsucaUmPedidoUsecase],
 })

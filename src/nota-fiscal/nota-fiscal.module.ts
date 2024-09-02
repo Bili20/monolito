@@ -1,10 +1,9 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { NotaFiscal } from './models/entities/nota-fiscal.entity';
-import { CriaNotaFiscalUseCase } from './useCase/criaNotaFiscal/criaNotaFiscal.use-case';
-import { NotaFiscalRepo } from './repository/notaFiscalRepoRepo';
 import { PessoaModule } from 'src/pessoa/pessoa.module';
-import { PedidoModule } from 'src/pedido/pedido.module';
+import { NotaFiscal } from './models/entities/nota-fiscal.entity';
+import { NotaFiscalRepo } from './repository/notaFiscalRepoRepo';
+import { CriaNotaFiscalUseCase } from './useCase/criaNotaFiscal/criaNotaFiscal.use-case';
 @Module({
   imports: [TypeOrmModule.forFeature([NotaFiscal]), PessoaModule],
   controllers: [],

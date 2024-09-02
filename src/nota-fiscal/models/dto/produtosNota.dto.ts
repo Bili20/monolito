@@ -3,6 +3,7 @@ import { IsNumber, IsString } from 'class-validator';
 export class ProdutosNotaDTO {
   @IsNumber()
   id: number;
+
   @IsString()
   nome: string;
 

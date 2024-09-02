@@ -6,6 +6,7 @@ import {
 } from '@nestjs/common';
 import { IProdutoRepo } from 'src/produto/models/interfaces/produtoRepo.interface';
 import { BuscaUmProdutoUseCase } from '../buscaUmProduto/buscaUmProduto.use-case';
+import { Produto } from 'src/produto/models/entities/produto.entity';
 
 @Injectable()
 export class AtualizaEstoqueUseCase {
@@ -14,9 +15,7 @@ export class AtualizaEstoqueUseCase {
   @Inject(BuscaUmProdutoUseCase)
   private readonly buscaUmProdutoUseCase: BuscaUmProdutoUseCase;
 
-  async execute(id: number, quantidade: number) {
-    const produto = await this.buscaUmProdutoUseCase.execute(id);
-
+  async execute(quantidade: number, produto: Produto) {
     if (quantidade > produto.qtd_estoque) {
       throw new BadRequestException({
         message: 'Sem quantidade de produto em estoque.',
@@ -24,6 +23,6 @@ export class AtualizaEstoqueUseCase {
     }
     const valorDesconto = produto.qtd_estoque - quantidade;
     produto.qtd_estoque = valorDesconto;
-    await this.produtoRepo.update(id, produto);
+    await this.produtoRepo.update(produto.id, produto);
   }
 }
