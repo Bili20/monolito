@@ -1,19 +1,11 @@
-import {
-  BadRequestException,
-  HttpException,
-  Inject,
-  Injectable,
-} from '@nestjs/common';
-import { IProdutoRepo } from 'src/produto/models/interfaces/produtoRepo.interface';
-import { BuscaUmProdutoUseCase } from '../buscaUmProduto/buscaUmProduto.use-case';
+import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { Produto } from 'src/produto/models/entities/produto.entity';
+import { IProdutoRepo } from 'src/produto/models/interfaces/produtoRepo.interface';
 
 @Injectable()
 export class AtualizaEstoqueUseCase {
   @Inject('IProdutoRepo')
   private readonly produtoRepo: IProdutoRepo;
-  @Inject(BuscaUmProdutoUseCase)
-  private readonly buscaUmProdutoUseCase: BuscaUmProdutoUseCase;
 
   async execute(quantidade: number, produto: Produto) {
     if (quantidade > produto.qtd_estoque) {
