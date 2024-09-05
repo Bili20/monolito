@@ -21,7 +21,7 @@ export class Pessoa {
   @Column({ name: 'data_nacimento', nullable: false })
   data_nacimento: Date;
 
-  @Column({ name: 'email', nullable: false })
+  @Column({ name: 'email', nullable: false, unique: true })
   email: string;
 
   @Column({ name: 'telefone', nullable: false })
