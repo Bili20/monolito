@@ -32,8 +32,10 @@ export class CriaPessoaUsecase {
       pessoa.telefone = param.telefone;
 
       const dataPessoa = await this.pessoaRepo.create(pessoa);
-      param.endereco.id_pessoa = dataPessoa.id;
-      await this.criaEnderecoUseCase.execute(param.endereco);
+      if (param.endereco) {
+        param.endereco.id_pessoa = dataPessoa.id;
+        await this.criaEnderecoUseCase.execute(param.endereco);
+      }
     } catch (e) {
       if (e.code == 23505) {
         e.response = 'Documento já cadastrado.';
