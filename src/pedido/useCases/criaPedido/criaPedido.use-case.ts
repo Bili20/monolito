@@ -54,15 +54,7 @@ export class CriaPedidoUseCase {
       pedido,
       arrayProduto,
     );
-    await this.enviaEmailUseCase.execute(
-      pdfNota.pessoa,
-      {
-        numero: pdfNota.numero,
-        data_cadastro: pdfNota.dataCadastro,
-        total: pedido.total,
-      },
-      `./notas/${pdfNota.filePath}`,
-    );
+    await this.enviaEmailUseCase.execute(pdfNota.pessoa);
   }
 
   private async geraArrayDosProdutosDoPedido(
