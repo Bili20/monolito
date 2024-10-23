@@ -11,17 +11,20 @@ export class CriaEnderecoUseCase {
   private readonly buscaUmEnderecoPrincipalUseCase: BuscaUmEnderecoPrincipalUseCase;
 
   async execute(param: CriaEnderecoDTO) {
-    if (param.principal == true) {
-      const endereco = await this.buscaUmEnderecoPrincipalUseCase.execute(
-        param.id_pessoa,
-      );
-      if (endereco) {
-        endereco.principal = false;
-        await this.enderecoRepo.update(endereco.id, endereco);
-      }
+    const endereco = await this.buscaUmEnderecoPrincipalUseCase.execute(
+      param.id_pessoa,
+    );
+
+    if (endereco) {
+      endereco.principal = false;
+      await this.enderecoRepo.update(endereco.id, endereco);
     }
-    const endereco = new Endereco(param);
-    await this.enderecoRepo.create(endereco);
+    const newendereco = new Endereco(param);
+    if (!endereco) {
+      newendereco.principal = true;
+    }
+
+    await this.enderecoRepo.create(newendereco);
     return;
   }
 }

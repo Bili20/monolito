@@ -9,6 +9,8 @@ import { CriaNotaFiscalUseCase } from 'src/nota-fiscal/useCase/criaNotaFiscal/cr
 import { ProdutosNotaDTO } from 'src/nota-fiscal/models/dto/produtosNota.dto';
 import { EnviaEmailUseCase } from 'src/email/enviaEmail.use-case';
 import { ProdutosQuantidadeDTO } from 'src/pedido/models/dto/produtosQuatidade.dto';
+import { StatusEnum } from 'src/enum/status.enum';
+import { CriaHistoricoUseCase } from '../criaHistorico/criaHistorico.use-case';
 
 @Injectable()
 export class CriaPedidoUseCase {
@@ -24,6 +26,8 @@ export class CriaPedidoUseCase {
   private readonly criaNotaFiscalUseCase: CriaNotaFiscalUseCase;
   @Inject(EnviaEmailUseCase)
   private readonly enviaEmailUseCase: EnviaEmailUseCase;
+  @Inject(CriaHistoricoUseCase)
+  private readonly criaHistoricoUseCase: CriaHistoricoUseCase;
 
   async execute(param: CriaPedidoDto) {
     try {
@@ -35,6 +39,10 @@ export class CriaPedidoUseCase {
       await this.criaPedidoProdutoUseCase.execute({
         id_pedido: dataPedido.id,
         produtos: produto.arrayProduto,
+      });
+      await this.criaHistoricoUseCase.execute({
+        status: StatusEnum.AGUARDANDO,
+        id_pedido: dataPedido.id,
       });
 
       await this.geraNotaFiscalDoPedido(dataPedido, produto.arrayProduto);
@@ -64,6 +72,8 @@ export class CriaPedidoUseCase {
     const pedido = new Pedido();
     pedido.quantidade = 0;
     pedido.id_pessoa = id_pessoa;
+    pedido.data_atualizacao = new Date();
+    pedido.status = StatusEnum.AGUARDANDO;
     pedido.total = 0;
 
     const arrayProduto: ProdutosNotaDTO[] = [];

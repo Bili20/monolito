@@ -18,4 +18,8 @@ export class PedidoRepo implements IPedidoRepo {
       relations: { pedidoProduto: true },
     });
   }
+
+  async update(id: number, param: Pedido): Promise<void> {
+    await this.pedidoRepo.update(id, param);
+  }
 }

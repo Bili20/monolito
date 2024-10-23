@@ -11,6 +11,9 @@ import {
 } from 'typeorm';
 import { CriaPedidoDto } from '../dto/criaPedido.dto';
 import { PedidoProduto } from './pedidoProduto.entity';
+import { StatusEnum } from 'src/enum/status.enum';
+import { BadRequestException } from '@nestjs/common';
+import { Historico } from './historico.entity';
 
 @Entity('pedido')
 export class Pedido {
@@ -34,6 +37,12 @@ export class Pedido {
   @Column({ type: 'decimal', nullable: false })
   total: number;
 
+  @Column({ nullable: true })
+  status: string;
+
+  @Column({ nullable: true })
+  data_atualizacao: Date;
+
   @Column({ nullable: false })
   id_pessoa: number;
 
@@ -49,4 +58,15 @@ export class Pedido {
     (pedidoProduto: PedidoProduto) => pedidoProduto.pedido,
   )
   pedidoProduto: PedidoProduto;
+
+  @OneToMany(() => Historico, (historico: Historico) => historico.pedido)
+  historico: Historico;
+
+  verificaStatus(status: StatusEnum) {
+    if (this.status == status) {
+      throw new BadRequestException({
+        message: 'Status não pode ser igual ao do mesmo momento.',
+      });
+    }
+  }
 }

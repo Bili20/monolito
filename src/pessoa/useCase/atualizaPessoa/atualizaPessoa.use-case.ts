@@ -22,7 +22,6 @@ export class AtualizaPessoaUseCase {
   async execute(id: number, param: AtualizaPessoaDTO) {
     try {
       const dataPessoa = await this.buscaUmaPessoaUsecase.execute(id);
-
       if (param.endereco) {
         await this.atualizaEnderecoUseCase.execute(
           dataPessoa.endereco[0].id,
