@@ -1,5 +1,5 @@
 export enum StatusEnum {
-  AGUARDANDO = 'Aguardo',
-  ENVIADO = 'Enviado',
-  FINALIZADO = 'Finalizado',
+  EM_PROCESSAMENTO = 'Em processamento',
+  CONCLUIDO = 'Concluido',
+  CANCELADO = 'Cancelado',
 }

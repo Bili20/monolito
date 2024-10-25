@@ -17,7 +17,7 @@ export class CriaPedidoDto {
 
   @IsEnum(StatusEnum)
   @IsOptional()
-  status: StatusEnum = StatusEnum.AGUARDANDO;
+  status: StatusEnum = StatusEnum.EM_PROCESSAMENTO;
 
   @IsString()
   @IsOptional()

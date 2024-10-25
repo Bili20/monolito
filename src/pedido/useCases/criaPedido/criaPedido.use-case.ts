@@ -41,7 +41,7 @@ export class CriaPedidoUseCase {
         produtos: produto.arrayProduto,
       });
       await this.criaHistoricoUseCase.execute({
-        status: StatusEnum.AGUARDANDO,
+        status: StatusEnum.EM_PROCESSAMENTO,
         id_pedido: dataPedido.id,
       });
 
@@ -73,7 +73,7 @@ export class CriaPedidoUseCase {
     pedido.quantidade = 0;
     pedido.id_pessoa = id_pessoa;
     pedido.data_atualizacao = new Date();
-    pedido.status = StatusEnum.AGUARDANDO;
+    pedido.status = StatusEnum.EM_PROCESSAMENTO;
     pedido.total = 0;
 
     const arrayProduto: ProdutosNotaDTO[] = [];
