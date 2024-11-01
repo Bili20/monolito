@@ -14,6 +14,9 @@ import { BuscaUmEnderecoPrincipalUseCase } from './useCase/bsucaUmEnderecoPrinci
 import { AtualizaEnderecoUseCase } from './useCase/atualizaEndereco/atualizaEndereco.use-case';
 import { CriaEnderecoController } from './useCase/criaEndereco/criaEndereco.controller';
 import { AtualizaEnderecoController } from './useCase/atualizaEndereco/atualizaEndereco.controller';
+import { BuscaUmaPessoaController } from './useCase/buscaUmaPessoa/buscaUmaPessoa.controller';
+import { BuscaPessoasUseCase } from './useCase/buscaPessoas/buscaPessoas.use-case';
+import { BuscaPessoasController } from './useCase/buscaPessoas/buscaPessoa.controller';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Pessoa, Endereco])],
@@ -22,10 +25,13 @@ import { AtualizaEnderecoController } from './useCase/atualizaEndereco/atualizaE
     AtualizaPessoaController,
     CriaEnderecoController,
     AtualizaEnderecoController,
+    BuscaUmaPessoaController,
+    BuscaPessoasController,
   ],
   providers: [
     CriaPessoaUsecase,
     BuscaUmaPessoaUsecase,
+    BuscaPessoasUseCase,
     AtualizaPessoaUseCase,
     PessoaRepo,
     { provide: 'IPessoaRepo', useExisting: PessoaRepo },

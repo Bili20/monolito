@@ -2,7 +2,7 @@ import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { IPedidoRepo } from 'src/pedido/models/interfaces/pedidoRepo.interface';
 
 @Injectable()
-export class BsucaUmPedidoUsecase {
+export class BuscaUmPedidoUsecase {
   @Inject('IPedidoRepo')
   private readonly pedidoRepo: IPedidoRepo;
 

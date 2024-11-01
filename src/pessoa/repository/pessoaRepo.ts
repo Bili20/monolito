@@ -26,4 +26,8 @@ export class PessoaRepo implements IPessoaRepo {
   async update(id: number, param: Pessoa): Promise<void> {
     await this.pessoaRepo.update(id, param);
   }
+
+  async find(): Promise<Pessoa[]> {
+    return await this.pessoaRepo.find({ relations: { endereco: true } });
+  }
 }
