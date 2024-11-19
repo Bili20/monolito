@@ -18,7 +18,7 @@ export class ProdutoRepo implements IProdutoRepo {
   }
 
   async find(): Promise<Produto[]> {
-    return await this.produtoRepo.find();
+    return await this.produtoRepo.find({ take: 1000 });
   }
 
   async update(id: number, param: Produto): Promise<void> {

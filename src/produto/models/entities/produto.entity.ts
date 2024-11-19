@@ -11,7 +11,7 @@ export class Produto {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ nullable: false, unique: true })
+  @Column({ nullable: false })
   nome: string;
 
   @Column({ type: 'decimal', nullable: false })

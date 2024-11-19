@@ -18,10 +18,10 @@ export class Pessoa {
   @Column({ name: 'documento', nullable: false, unique: true })
   documento: string;
 
-  @Column({ name: 'data_nacimento', nullable: false })
+  @Column({ name: 'data_nascimento', nullable: false })
   data_nacimento: Date;
 
-  @Column({ name: 'email', nullable: false, unique: true })
+  @Column({ name: 'email', nullable: false })
   email: string;
 
   @Column({ name: 'telefone', nullable: false })

@@ -18,7 +18,7 @@ export class PessoaRepo implements IPessoaRepo {
 
   async findOne(id: number): Promise<Pessoa> {
     return await this.pessoaRepo.findOne({
-      where: { id: id, endereco: { principal: true } },
+      where: { id: id },
       relations: { endereco: true },
     });
   }
@@ -28,6 +28,9 @@ export class PessoaRepo implements IPessoaRepo {
   }
 
   async find(): Promise<Pessoa[]> {
-    return await this.pessoaRepo.find({ relations: { endereco: true } });
+    return await this.pessoaRepo.find({
+      relations: { endereco: true },
+      take: 1000,
+    });
   }
 }

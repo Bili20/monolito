@@ -20,7 +20,7 @@ export class PedidoRepo implements IPedidoRepo {
   }
 
   async find(): Promise<Pedido[]> {
-    return await this.pedidoRepo.find();
+    return await this.pedidoRepo.find({ take: 1000 });
   }
 
   async update(id: number, param: Pedido): Promise<void> {

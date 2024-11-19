@@ -21,6 +21,7 @@ import { BuscaUmProdutoController } from './useCases/buscaUmProduto/buscaUmProdu
     BuscaUmProdutoUseCase,
     AtualizaEstoqueUseCase,
     CadastroProdutoUseCase,
+    BuscaProdutosUseCase,
     ProdutoRepo,
     { provide: 'IProdutoRepo', useExisting: ProdutoRepo },
   ],

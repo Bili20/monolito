@@ -1,0 +1,47 @@
+INSERT INTO produto (nome, valor, qtd_estoque)
+SELECT 
+    'Produto ' || generate_series(1, 100),    
+    ROUND(RANDOM() * 100 + 1),            
+    (RANDOM() * 100)::INT                 
+FROM 
+    generate_series(1, 100);
+
+
+    INSERT INTO pedido (quantidade, data_cadastro, total, status, data_atualizacao, id_pessoa)
+SELECT 
+    (RANDOM() * 10 + 1)::INT,                                  
+    NOW() - (INTERVAL '1 day' * (RANDOM() * 30)),              
+    ROUND((RANDOM() * 500 + 50)),                          
+    CASE 
+        WHEN RANDOM() < 0.33 THEN 'Em processamento' 
+        WHEN RANDOM() < 0.66 THEN 'Concluido' 
+        ELSE 'Cancelado' 
+    END,                                                        
+    NOW(),                                                     
+    p.id                                   
+FROM 
+    pessoa p;
+
+    INSERT INTO pessoa (nome, documento, data_nascimento, email, telefone, sexo)
+SELECT 
+    'Pessoa ' || generate_series(1, 100),                         
+    LPAD((RANDOM() * 1000000000)::BIGINT::TEXT, 11, '0'),         
+    NOW() - (INTERVAL '1 year' * (RANDOM() * 50 + 20)),           
+    'pessoa' || generate_series(1, 100) || '@exemplo.com',        
+    '(11) ' || (RANDOM() * 9999 + 1000)::INT || '-' ||           
+    (RANDOM() * 9999 + 1000)::INT,
+    CASE WHEN RANDOM() > 0.5 THEN 'Masculino' ELSE 'Feminino' END
+FROM 
+    generate_series(1, 100);
+
+INSERT INTO endereco (bairro, numero, estado, cidade, cep, principal, id_pessoa)
+SELECT 
+    'Bairro ' || p.id,                               
+    (RANDOM() * 1000)::INT + 1,                      
+    'Estado ',                  
+    'Cidade ' || p.id,                               
+    LPAD((RANDOM() * 100000)::INT::TEXT, 5, '0') || '-' || LPAD((RANDOM() * 1000)::INT::TEXT, 3, '0'),
+    true,                                            
+    p.id                                             
+FROM 
+    pessoa p;
